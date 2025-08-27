@@ -12,9 +12,5 @@ venv/
 # Ignore generated agent files
 *.AI
 
-# Ignore mapping files
-mapping.json
-mapping-example.json
-
 # Ignore test secret data
 /test/secret-data/
