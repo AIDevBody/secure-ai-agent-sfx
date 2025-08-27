@@ -1,8 +1,29 @@
 # Secure AI Agent SFX
 
+<!-- Badges -->
+[![Sponsor on GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-fafbfc?logo=github&labelColor=181717)](https://github.com/sponsors/aidevbody)
+[![License: AAL](https://img.shields.io/badge/License-AAL-blue.svg)](#license)
+![Platform](https://img.shields.io/badge/platform-macOS%20|%20Linux%20|%20Windows-informational)
+![Script](https://img.shields.io/badge/script-bash-informational)
+
+---
+
+## Table of contents
+
+- [Overview](#overview)
+- [Why do I need it?](#why-do-i-need-it)
+- [Features](#features)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Tests](#tests)
+- [Contributing & Support](#contributing--support)
+- [License](#license)
+
 ## Overview
 
 This project provides a Bash script (**`CreateAgentInfoFile.sh`**) that helps developers securely transmit their project code to AI assistants. The script walks your project directory, lets you choose which files and folders to include, applies an optional mapping to replace sensitive tokens with placeholders and builds a standalone `.AI` file containing your project's source encoded in Base64. The generated agent can reconstruct the project later and supports reversing the mapping to restore the original tokens.
+
+> **Note on tone** – This project is something I work on in my free time. I enjoy hacking on tools that protect developers' privacy, but I can’t guarantee that I’ll be able to respond to issues or add new languages at lightning speed. Please be patient; I'll do my best when time permits!
 
 ### Why do I need it?
 
@@ -52,8 +73,8 @@ The repository includes a `test/` folder with dummy files and directories used f
 
 ## Contributing & Support
 
-Contributions, feature requests, and bug reports are welcome through GitHub issues. If you find this project useful, please consider [sponsoring us](https://github.com/AIDevBody/secure-ai-agent-sfx) or making a donation to help support continued development and the addition of more language environments. A portion of donations will fund development of Python and PowerShell versions and a future cross‑platform GUI.
+Contributions, feature requests, and bug reports are welcome through GitHub issues. If you find this project useful, please consider [sponsoring me](https://github.com/sponsors/aidevbody) or making a donation to help support continued development and the addition of more language environments. A portion of donations will fund development of Python and PowerShell versions and a future cross‑platform GUI.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the **Attribution Assurance License (AAL)**. You are free to use and modify the code, but any redistribution or derivative work must clearly credit this project and display the attribution banner defined in the license【695430619762696†L82-L98】. See [LICENSE](LICENSE) for the full text.

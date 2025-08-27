@@ -1,5 +1,13 @@
 # Usage Guide
 
+## Table of contents
+
+- [Creating an Agent File](#creating-an-agent-file)
+- [Reconstructing a Project](#reconstructing-a-project)
+- [Notes](#notes)
+
+---
+
 This document expands on the quick usage provided in the README and gives examples for creating an agent file and reconstructing your project.
 
 ## Creating an Agent File
