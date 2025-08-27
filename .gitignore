@@ -1,0 +1,20 @@
+# Ignore Node modules and Python virtual environments
+node_modules/
+venv/
+
+# Ignore environment variables and secrets
+.env
+*.env
+
+# Ignore compiled binaries and logs
+*.log
+
+# Ignore generated agent files
+*.AI
+
+# Ignore mapping files
+mapping.json
+mapping-example.json
+
+# Ignore test secret data
+/test/secret-data/
