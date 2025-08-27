@@ -4,6 +4,7 @@
 
 - [Creating an Agent File](#creating-an-agent-file)
 - [Reconstructing a Project](#reconstructing-a-project)
+- [Troubleshooting](#troubleshooting)
 - [Notes](#notes)
 
 ---
@@ -18,7 +19,7 @@ This document expands on the quick usage provided in the README and gives exampl
    cd /path/to/your/project
    ```
 
-2. Run the script with your desired options. For example, to create an agent called `MyProject.AI` while ignoring any Git metadata and using a mapping file:
+2. Create an agent named `MyProject.AI` using a mapping file:
 
    ```bash
    ./CreateAgentInfoFile.sh -n "MyProject.AI" -m mapping-example.json
@@ -33,17 +34,42 @@ This document expands on the quick usage provided in the README and gives exampl
 To reconstruct the project from an agent file:
 
 1. Copy the generated `.AI` file to your working directory.
-2. Run the agent script. If you used a mapping file when creating the agent, supply the same mapping file so that placeholders are replaced with their original values:
+2. On macOS/Linux, ensure it’s executable:
+
+   ```bash
+   chmod +x MyProject.AI
+   ```
+
+3. Run the agent. If you used a mapping file when creating the agent, supply the same mapping file so that placeholders are replaced with their original values:
 
    ```bash
    ./MyProject.AI --mapping mapping-example.json
    ```
 
-3. The agent will recreate all included files and directories relative to the current directory.
+4. The agent will recreate all included files and directories **relative to the current directory**.
+
+## Troubleshooting
+
+- **Missing dependency: jq** (Windows Git Bash):  
+  Install via MSYS2 pacman:
+  ```bash
+  pacman -S mingw-w64-x86_64-jq
+  ```
+  Ensure Git Bash can find it on `PATH`. Alternatively, use WSL and install with your distro’s package manager.
+
+- **Missing dependency: perl**:  
+  Install from your platform’s package manager (e.g., `sudo apt-get install perl`, `brew install perl`, or MSYS2 pacman).
+
+- **Permission denied (macOS/Linux)** when running `.AI` files:  
+  ```bash
+  chmod +x MyProject.AI
+  ```
+
+- **Mapping not applied during reconstruction**:  
+  Be sure to pass the same mapping file path: `./MyProject.AI --mapping mapping-example.json`
 
 ## Notes
 
-- If dependencies (`jq` and `perl`) are missing on your machine and you provided a mapping file, the agent attempts to install them for you. It prompts before installation.
-- The mapping file is never packaged into the agent file for security reasons. Keep your mapping file safe and version‑controlled in a private repository.
-- You can combine `--include --git` and `--include --gitignore` options to include everything, including Git metadata and files normally excluded by `.gitignore`.
-
+- If dependencies (`jq` and `perl`) are missing and you provided a mapping file, the agent attempts to install them and will prompt before doing so.
+- The mapping file is **never** packaged into the agent file for security reasons. Keep your mapping file safe (ideally private).
+- You can combine `--include git` and `--include gitignore` to include **everything**, including Git metadata and files normally excluded by `.gitignore`.
