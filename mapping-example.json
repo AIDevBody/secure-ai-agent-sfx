@@ -1,0 +1,22 @@
+{
+  "description": "Example mapping file for secure-ai-agent-sfx. Replace sensitive strings with placeholders and ignore selected folders.",
+  "ignore-folders": [
+    "test/secret-data",
+    "docs/private"
+  ],
+  "map": [
+    {
+      "scope": ".",
+      "list": [
+        { "SecretCompanyName": "CompanyName" },
+        { "SecureProjectName": "ProjectName" }
+      ]
+    },
+    {
+      "scope": "scripts/run_example.sh",
+      "list": [
+        { "original command": "replacement command" }
+      ]
+    }
+  ]
+}
