@@ -203,6 +203,65 @@ _attempt_install_perl() {
   return 1
 }
 
+# -------------------------
+# JSON validation helpers
+# These helpers are used when a mapping file is provided.  They detect and
+# optionally correct common JSON issues such as trailing commas, so that
+# problems are caught before the script walks through your project.  The
+# validate function will prompt the user before modifying their mapping file.
+#
+# sanitize_json_file INPUT OUTPUT
+#   Removes trailing commas that immediately precede a closing `]` or `}` and
+#   writes the result to OUTPUT.  Trailing commas are not allowed in JSON
+#   syntax and cause `jq` to fail【658180752171012†L193-L198】【658180752171012†L362-L366】.
+sanitize_json_file() {
+  local _src="$1" _dst="$2"
+  # Use Perl in slurp mode to remove a comma followed by optional whitespace
+  # before a closing brace/bracket.  This preserves other formatting.
+  perl -0777 -pe 's/,[[:space:]]*([}\]])/$1/g' "$_src" > "$_dst"
+}
+
+# validate_and_correct_mapping_json FILE
+#   Validates that FILE contains valid JSON using jq.  If invalid JSON is
+#   detected, attempts to sanitize common issues (currently trailing commas).
+#   On successful sanitization, prompts the user to accept the corrected
+#   content.  If the user declines or sanitization fails, the script exits
+#   with an error.  Requires jq (and Perl for sanitization); call
+#   ensure_mapping_deps_if_needed before invoking this.
+validate_and_correct_mapping_json() {
+  local _file="$1"
+  # If jq can parse it, nothing to do.
+  if jq empty "$_file" >/dev/null 2>&1; then
+    return 0
+  fi
+  # Attempt to produce a sanitized version without trailing commas.
+  local _tmp
+  _tmp="$(mktemp)"
+  if ! sanitize_json_file "$_file" "$_tmp"; then
+    rm -f "$_tmp"
+    echo "Failed to sanitize mapping JSON: $_file" >&2
+    exit 2
+  fi
+  if jq empty "$_tmp" >/dev/null 2>&1; then
+    echo "Warning: mapping file \"$_file\" contains invalid JSON (likely trailing commas)."
+    if ask_yes_no "Attempt to auto-correct by removing trailing commas? [Y/n]" "y"; then
+      # Overwrite the original file with the sanitized version.
+      cp "$_tmp" "$_file"
+      echo "Mapping file corrected: $_file"
+      rm -f "$_tmp"
+      return 0
+    else
+      echo "Aborting due to invalid mapping file format."
+      rm -f "_tmp"
+      exit 2
+    fi
+  else
+    rm -f "$_tmp"
+    echo "Mapping file \"$_file\" contains invalid JSON that could not be auto-corrected." >&2
+    exit 2
+  fi
+}
+
 # Only enforce jq/perl presence when mapping is requested.
 # The prompts here intentionally explain PATH-refresh quirks on Windows.
 ensure_mapping_deps_if_needed() {
@@ -301,6 +360,14 @@ done
 
 # If mapping is requested, ensure deps (ask/install if missing)
 ensure_mapping_deps_if_needed
+
+# If a mapping file was provided, validate its JSON syntax now.  This
+# prevents the script from prompting for files only to fail later when
+# parsing the mapping.  The function will prompt to correct common issues
+# like trailing commas.
+if [[ -n "${MAPPING_FILE:-}" ]]; then
+    validate_and_correct_mapping_json "$MAPPING_FILE"
+fi
 
 # Convert the high-level include switches into concrete booleans.
 INCLUDE_GIT=0

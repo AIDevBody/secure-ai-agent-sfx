@@ -23,6 +23,8 @@ This document expands on the quick usage provided in the README and gives exampl
 
    ```bash
    ./CreateAgentInfoFile.sh -n "MyProject.AI" -m mapping-example.json
+
+   Before scanning your project, the script validates the JSON syntax of the mapping file. If it detects invalid JSON—most commonly trailing commas before a closing `]` or `}`—it offers to automatically correct the file by removing those commas. If you decline the correction, the script aborts so you can fix the file manually.
    ```
 
 3. Follow the prompts. The script will walk through your project and ask whether to include or exclude files and directories. Answer `y` to include and `n` to exclude. Selecting "Add all files" for a directory will include all files within that directory while still respecting `.gitignore` and your mapping file's ignored folders.
